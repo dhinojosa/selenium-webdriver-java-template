@@ -8,7 +8,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 public class PlayWithCGI {
 
@@ -25,14 +28,16 @@ public class PlayWithCGI {
     }
 
     @Test
-    void testRelativeLocators() {
+    void testRelativeLocators() throws IOException {
+        InputStream resourceAsStream = this.getClass().getResourceAsStream("/locators.properties");
+        Properties properties = new Properties();
+        properties.load(resourceAsStream);
+
+
         driver.get(
                 "https://www.cgi.com/en/search/site?keyword=business%20consulting");
 
-        //anchor
-        WebElement articleContainer = driver.findElement
-                (By.cssSelector("#block-cgi-default-content > div.solr-search-result-wrapper"));
-
+        WebElement articleContainer = driver.findElement(By.cssSelector(properties.getProperty("article-head-css")));
         //sections inside the anchor
         List<WebElement> sections = articleContainer.findElements(By.tagName("section"));
 
